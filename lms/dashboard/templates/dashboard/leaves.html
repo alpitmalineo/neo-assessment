@@ -1,0 +1,142 @@
+{% extends 'base/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{%block title %} Leaves {%endblock%}
+
+{% block breadcrumbs %}
+
+<li>
+    <div class="flex items-center">
+        <svg aria-hidden="true" class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
+             xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"></path>
+        </svg>
+        <a href=""
+           class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white">Leaves</a>
+    </div>
+</li>
+
+{% endblock %}
+
+{% block breadcrumbsbtn %}
+<br>
+<div class="container py-10 px-10 mx-0 min-w-full flex flex-col items-end">
+    <a href="{% url 'dashboard:apply_leave' %}">
+        <button type="button"
+                class="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 items-center">
+            Apply Leave
+        </button>
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+<h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Leaves List</h4>
+<div class="w-full overflow-hidden rounded-lg shadow-xs">
+    <div class="w-full overflow-x-auto">
+        <table class="w-full whitespace-no-wrap">
+            <thead>
+            <tr
+                    class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
+            >
+                <th class="px-4 py-3">From Date</th>
+                <th class="px-4 py-3">To Date</th>
+                <th class="px-4 py-3">Reason</th>
+                <th class="px-4 py-3">Status</th>
+                <th class="px-4 py-3">Created</th>
+                <th class="px-4 py-3">Updated</th>
+                <th class="px-4 py-3">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+            {% if leaves %}
+            {% for leave in leaves %}
+            <tr class="text-gray-700 dark:text-gray-400">
+                <td class="px-4 py-3 text-sm">
+                    {{ leave.from_date|date:"d/M/Y" }}
+                </td>
+                <td class="px-4 py-3 text-sm">
+                    {{ leave.to_date|date:"d/M/Y"  }}
+                </td>
+                <td class="px-4 py-3 text-sm">
+                    {{ leave.reason }}
+                </td>
+                <td class="px-4 py-3 text-xs">
+                    {% if leave.status == 2 %}
+                    <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                Approved
+                            </span>
+                    {% elif leave.status == 1 %}
+                    <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:bg-yellow-700 dark:text-yellow-100">
+                                Pending
+                            </span>
+                    {% else %}
+                    <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:bg-red-700 dark:text-red-100">
+                                Rejected
+                            </span>
+                    {% endif %}
+                </td>
+                <td class="px-4 py-3 text-sm">
+                    {{ leave.created_at }}
+                </td>
+                <td class="px-4 py-3 text-sm">
+                    {{ leave.updated_at }}
+                </td>
+                <td class="px-4 py-3">
+                    <div class="flex items-center space-x-4 text-sm">
+                        <a href="{% url 'dashboard:leave_detail' leave.id %}">
+                            <button
+                                    class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                    aria-label="View"
+                            >
+                                <svg
+                                        class="w-5 h-5"
+                                        aria-hidden="true"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                >
+                                    <path
+                                            d="M10 3C5.5 3 2 7.58 2 10s3.5 7 8 7 8-4.58 8-7-3.5-7-8-7zm0 2c2.48 0 4.5 3 4.5 5S12.48 15 10 15s-4.5-3-4.5-5S7.52 5 10 5zm0 2a3 3 0 100 6 3 3 0 000-6z"
+                                    ></path>
+                                </svg>
+                            </button>
+                        </a>
+                        <a href="{% url 'dashboard:delete_leave' leave.id %}">
+                            <button
+                                    class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                                    aria-label="Delete"
+                            >
+                                <svg
+                                        class="w-5 h-5"
+                                        aria-hidden="true"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                >
+                                    <path
+                                            fill-rule="evenodd"
+                                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                            clip-rule="evenodd"
+                                    ></path>
+                                </svg>
+                            </button>
+                        </a>
+                    </div>
+                </td>
+                {% endfor%}
+                {% else %}
+            <tr>
+                <td>No Record Found</td>
+            </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock%}
+
+{%block js%}
+
+{% endblock %}

@@ -3,7 +3,7 @@
         <div class="flex items-center">
             <i class="ml-6 fas fa-solid fa-i" style="color: #4f46e5;"></i>
             <i class="ml-4 fas fa-solid fa-heart fa-beat-fade text-red-500"></i>
-            <a class="ml-2 text-xl font-extrabold text-gray-800 dark:text-gray-200" href="#">JIJO</a>
+            <a class="ml-2 text-xl font-extrabold text-gray-800 dark:text-gray-200" href="#">LMS</a>
         </div>
 
         <ul class="mt-6">
@@ -14,65 +14,27 @@
                     <span class="ml-4">Dashboard</span>
                 </a>
             </li>
+            {% if request.user.role and request.user.role.role_type == 1 %}
             <li class="relative px-6 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150">
                 <a class="flex items-center w-full text-sm font-semibold text-gray-800 dark:text-gray-200 hover:text-purple-600 transition duration-150" href="{% url 'accounts:user' %}">
                     <i class="fas fa-thin fa-users"></i>
-                    <span class="ml-4">Users</span>
+                    <span class="ml-4">Staff</span>
                 </a>
             </li>
+            {% endif %}
             <li class="relative px-6 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150">
-                <a class="flex items-center w-full text-sm font-semibold text-gray-800 dark:text-gray-200 hover:text-purple-600 transition duration-150" href="{% url 'products:banner' %}">
-                    <i class="fas fa-thin fa-photo-film"></i>
-                    <span class="ml-4">Banners</span>
+                {% if request.user.role and request.user.role.id == 0  or request.user.role.role_type == 1%}
+
+                <a class="flex items-center w-full text-sm font-semibold text-gray-800 dark:text-gray-200 hover:text-purple-600 transition duration-150" href="{% url 'dashboard:leave_manage' %}">
+                    <i class="fas fa-thin fa-pen-clip"></i>
+                    <span class="ml-4">Manage Leaves</span>
                 </a>
-            </li>
-            <li class="relative px-6 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150">
-                <a class="flex items-center w-full text-sm font-semibold text-gray-800 dark:text-gray-200 hover:text-purple-600 transition duration-150" href="{% url 'products:category' %}">
-                    <i class='fas fa-sitemap'></i>
-                    <span class="ml-4">Categories</span>
+                {% else %}
+                <a class="flex items-center w-full text-sm font-semibold text-gray-800 dark:text-gray-200 hover:text-purple-600 transition duration-150" href="{% url 'dashboard:leaves' %}">
+                    <i class="fas fa-thin fa-business-time"></i>
+                    <span class="ml-4">Leaves</span>
                 </a>
-            </li>
-            <li class="relative px-6 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150">
-                <a class="flex items-center w-full text-sm font-semibold text-gray-800 dark:text-gray-200 hover:text-purple-600 transition duration-150" href="{% url 'products:ingredient' %}">
-                    <i class="fas fa-solid fa-plate-wheat"></i>
-                    <span class="ml-4">Ingredients</span>
-                </a>
-            </li>
-            <li class="relative px-6 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150">
-                <a class="flex items-center w-full text-sm font-semibold text-gray-800 dark:text-gray-200 hover:text-purple-600 transition duration-150" href="{% url 'products:product' %}">
-                    <i class="fas fa-solid fa-layer-group"></i>
-                    <span class="ml-4">Products</span>
-                </a>
-            </li>
-            <li class="relative px-6 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150">
-                <a class="flex items-center w-full text-sm font-semibold text-gray-800 dark:text-gray-200 hover:text-purple-600 transition duration-150" href="{% url 'products:package' %}">
-                    <i class="fas fa-solid fa-cube"></i>
-                    <span class="ml-4">Packages</span>
-                </a>
-            </li>
-            <li class="relative px-6 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150">
-                <a class="flex items-center w-full text-sm font-semibold text-gray-800 dark:text-gray-200 hover:text-purple-600 transition duration-150" href="{% url 'orders:stock_location' %}">
-                    <i class="fas fa-solid fa-map-location"></i>
-                    <span class="ml-4">Stock Locations</span>
-                </a>
-            </li>
-            <li class="relative px-6 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150">
-                <a class="flex items-center w-full text-sm font-semibold text-gray-800 dark:text-gray-200 hover:text-purple-600 transition duration-150" href="{% url 'orders:inventory' %}">
-                    <i class="fas fa-regular fa-warehouse"></i>
-                    <span class="ml-4">Inventory</span>
-                </a>
-            </li>
-            <li class="relative px-6 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150">
-                <a class="flex items-center w-full text-sm font-semibold text-gray-800 dark:text-gray-200 hover:text-purple-600 transition duration-150" href="{% url 'orders:stocks' %}">
-                    <i class="fas fa-regular fa-boxes-stacked"></i>
-                    <span class="ml-4">Stocks</span>
-                </a>
-            </li>
-            <li class="relative px-6 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150">
-                <a class="flex items-center w-full text-sm font-semibold text-gray-800 dark:text-gray-200 hover:text-purple-600 transition duration-150" href="">
-                    <i class="fas fa-regular fa-truck"></i>
-                    <span class="ml-4">Orders</span>
-                </a>
+                {% endif %}
             </li>
         </ul>
     </div>

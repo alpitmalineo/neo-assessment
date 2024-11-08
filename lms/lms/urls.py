@@ -15,8 +15,35 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib.auth.views import (PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView,
+                                       PasswordResetCompleteView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('accounts.urls')),
+    path('dashboard/', include('dashboard.urls')),
+
+    path('reset_password/', PasswordResetView.as_view(template_name="registration/password-reset.html"),
+         name="password_reset"),
+    path('reset_password/done/', PasswordResetDoneView.as_view(template_name="registration/password-reset-done.html"),
+         name="password_reset_done"),
+    path('reset_password/confirm/<uidb64>/<token>/',
+         PasswordResetConfirmView.as_view(template_name="registration/password-reset-confirm.html"),
+         name="password_reset_confirm"),
+    path('reset_password/complete/',
+         PasswordResetCompleteView.as_view(template_name="registration/password-reset-complete.html"),
+         name="password_reset_complete"),
+
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+admin.site.site_header = "LMS Admin"
+admin.site.site_title = "LMS Admin Portal"
+admin.site.index_title = "Welcome to LMS Portal"
+

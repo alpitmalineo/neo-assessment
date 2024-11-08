@@ -3,17 +3,16 @@ from django.utils.translation import gettext_lazy as _
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, **kwargs):
+    def create_user(self, username, **kwargs):
         """
-        Creates and saves a User with the given email
+        Creates and saves a User with the given username
         """
-        if not email:
-            raise ValueError(_('The Email must be set'))
+        if not username:
+            raise ValueError(_('The Username must be set'))
 
         password = kwargs.get('password', None)
 
-        email = self.normalize_email(email)
-        user = self.model(email=email, **kwargs)
+        user = self.model(username=username, **kwargs)
 
         if password:
             user.set_password(password)
@@ -21,9 +20,9 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password=None, **kwargs):
+    def create_superuser(self, username, password=None, **kwargs):
         user = self.create_user(
-            email=email,
+            username=username,
             **kwargs
         )
         user.set_password(password)
@@ -35,11 +34,11 @@ class UserManager(BaseUserManager):
         return user
 
     def get_normal_detail(self):
-        return self.model.objects.only('id', 'name', 'user_image', 'email', 'mobile_number',
-                                       'is_active', 'is_verified', 'user_type')
+        return self.model.objects.only('id', 'name', 'username', 'mobile_number',
+                                       'is_active', 'role')
 
-    def get_by_natural_key(self, email):
-        return self.get(email=email)
+    def get_by_natural_key(self, username):
+        return self.get(username=username)
 
     def active(self):
         return self.model.objects.filter(active=True)
