@@ -69,4 +69,4 @@ class SignUpForm(forms.ModelForm):
 class EditUserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['role', 'first_name', 'last_name', 'email', 'is_active']
+        fields = ['role_type', 'first_name', 'last_name', 'email', 'is_active']

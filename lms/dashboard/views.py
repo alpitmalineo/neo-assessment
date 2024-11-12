@@ -47,9 +47,7 @@ class UpdateLeaveView(LoginRequiredMixin, generic.UpdateView):
 def leave_manage(request):
     hod = request.user
     department = hod.department
-    print(department)
     leaves = Leave.objects.filter(user__department=department).order_by('id')
-    print(leaves)
     paginator = Paginator(leaves, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)

@@ -16,11 +16,11 @@ class TimeStamp(models.Model):
         abstract = True
 
 
-class Role(TimeStamp):
-    role_type = models.IntegerField(choices=RoleType.choices, help_text=RoleType.choices)
-
-    def __str__(self):
-        return f'{self.get_role_type_display()}'
+# class Role(TimeStamp):
+#     role_type = models.IntegerField(choices=RoleType.choices, help_text=RoleType.choices)
+#
+#     def __str__(self):
+#         return f'{self.get_role_type_display()}'
 
 class Department(TimeStamp):
     name = models.CharField(max_length=100)
@@ -35,7 +35,7 @@ class User(AbstractUser, TimeStamp):
     email = models.EmailField(unique=True)
     mobile_number = PhoneNumberField()
     image = models.ImageField(upload_to='image', null=True, blank=True)
-    role = models.ForeignKey(Role, on_delete=models.CASCADE, null=True, blank=True)
+    role_type = models.IntegerField(choices=RoleType.choices, help_text=RoleType.choices, null=True, blank=True)
     department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)

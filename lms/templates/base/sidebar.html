@@ -14,7 +14,7 @@
                     <span class="ml-4">Dashboard</span>
                 </a>
             </li>
-            {% if request.user.role and request.user.role.role_type == 1 %}
+            {% if request.user and request.user.role_type == 1 %}
             <li class="relative px-6 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150">
                 <a class="flex items-center w-full text-sm font-semibold text-gray-800 dark:text-gray-200 hover:text-purple-600 transition duration-150" href="{% url 'accounts:user' %}">
                     <i class="fas fa-thin fa-users"></i>
@@ -23,7 +23,7 @@
             </li>
             {% endif %}
             <li class="relative px-6 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150">
-                {% if request.user.role and request.user.role.id == 0  or request.user.role.role_type == 1%}
+                {% if request.user and request.user.role_type.id == 0  or request.user.role_type == 1%}
 
                 <a class="flex items-center w-full text-sm font-semibold text-gray-800 dark:text-gray-200 hover:text-purple-600 transition duration-150" href="{% url 'dashboard:leave_manage' %}">
                     <i class="fas fa-thin fa-pen-clip"></i>

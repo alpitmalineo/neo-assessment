@@ -9,7 +9,7 @@ from django.views import generic
 
 from accounts.enums import RoleType
 from accounts.forms import SignUpForm, EditUserForm
-from accounts.models import User, Role
+from accounts.models import User
 from accounts.utils import is_admin_or_is_hod_or_is_staff, is_hod
 
 
@@ -64,8 +64,7 @@ def hod_signup(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             user_obj = form.save(commit=False)
-            rol_type = Role.objects.get(role_type=1)
-            user_obj.role = rol_type
+            user_obj.role_type = RoleType.HOD
             user_obj.save(['role_type'])
             return redirect('accounts:login')
     else:
@@ -78,8 +77,7 @@ def staff_signup(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             user_obj = form.save(commit=False)
-            rol_type = Role.objects.get(role_type=2)
-            user_obj.role = rol_type
+            user_obj.role_type = RoleType.STAFF
             user_obj.save(['role_type'])
             return redirect('accounts:login')
     else:
@@ -108,7 +106,8 @@ def add_user(request):
 def user(request):
     hod = request.user
     department = hod.department
-    users = User.objects.filter(role=3, department=department)
+    print(hod, department)
+    users = User.objects.filter(role_type=RoleType.STAFF, department=department)
     context = {'users': users, }
     return render(request, 'accounts/user.html', context)
 

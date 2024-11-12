@@ -1,6 +1,8 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 
+from accounts.enums import RoleType
+
 
 class UserManager(BaseUserManager):
     def create_user(self, username, **kwargs):
@@ -26,6 +28,7 @@ class UserManager(BaseUserManager):
             **kwargs
         )
         user.set_password(password)
+        user.role_type = RoleType.ADMIN
         user.is_superuser = True
         user.is_active = True
         user.is_staff = True
