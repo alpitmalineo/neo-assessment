@@ -11,22 +11,23 @@ from accounts.enums import RoleType
 from accounts.forms import SignUpForm, EditUserForm
 from accounts.models import User
 from accounts.utils import is_admin_or_is_hod_or_is_staff, is_hod
+from dashboard.enums import StatusType
+from dashboard.models import Leave
 
 
 # Create your views here.
 @user_passes_test(is_admin_or_is_hod_or_is_staff, login_url='accounts:logout')
 def dashboard(request):
-    # product = Product.objects.filter(is_active=True, is_deleted=False).order_by('id')
-    # balance = MyOrder.objects.filter(payment_status=1)
-    # sale = MyOrder.objects.filter(payment_status=1, order_status='DELIVERED')
-    # delivery = MyOrder.objects.filter(order_status='UPDATE')
-    # total_product = product.count()
-    # total_balance = sum(order.get_total() for order in balance)
-    # total_sale = sale.count()
-    # total_deliveries = delivery.count()
-    # context = {'total_product': total_product, 'total_balance': total_balance, 'total_sale': total_sale,
-    #            'total_deliveries': total_deliveries}
-    return render(request, 'accounts/dashboard.html')
+    users = User.objects.filter(role_type=RoleType.STAFF, department=request.user.department, is_active=True).count()
+    pending_leaves = Leave.objects.filter(user__department=request.user.department,
+                                          status=StatusType.PENDING).order_by('id').count()
+    approved_leaves = Leave.objects.filter(user__department=request.user.department,
+                                           status=StatusType.APPROVED).order_by('id').count()
+    rejected_leaves = Leave.objects.filter(user__department=request.user.department,
+                                           status=StatusType.REJECTED).order_by('id').count()
+    context = {'users': users, 'pending_leaves': pending_leaves, 'approved_leaves': approved_leaves,
+               'rejected_leaves': rejected_leaves}
+    return render(request, 'accounts/dashboard.html', context)
 
 
 def role(request):
@@ -104,10 +105,7 @@ def add_user(request):
 
 @user_passes_test(is_hod, login_url='accounts:logout')
 def user(request):
-    hod = request.user
-    department = hod.department
-    print(hod, department)
-    users = User.objects.filter(role_type=RoleType.STAFF, department=department)
+    users = User.objects.filter(role_type=RoleType.STAFF, department=request.user.department)
     context = {'users': users, }
     return render(request, 'accounts/user.html', context)
 
